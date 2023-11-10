@@ -28,6 +28,34 @@ class Conexao():
             except cx_Oracle.Error as error:
                 print('Erro ao executar funcao:', error)
                 return None
+    def user_register(self,sql):
+        connection = cx_Oracle.connect(user=self.un, password=self.pw, dsn=self.cs)
+        if connection:
+            try:  
+                print('conectado')
+                with connection.cursor() as cursor:
+                    cursor.execute(sql)
+                    connection.commit()
+                    flash('Account created!', category='success')
+            except cx_Oracle.Error as error:
+                print('Erro ao executar user_register:', error)
+                flash('Error creating account: ' + str(error), category='error')
+                return None
+            
+connection = Conexao()
+conexao = cx_Oracle.connect(user=connection.un, password=connection.pw, dsn=connection.cs)
+
+
+
+
+sql = (f"select ds_senha from users where nm_usuario = 'admin'") 
+with conexao.cursor() as cursor:
+    cursor.execute(sql)
+    rows = cursor.fetchone()
+    for row in rows:
+        print(row)
+
+
 
 class User():
     def __init__(self):
