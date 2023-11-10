@@ -1,7 +1,59 @@
 {%extends 'main.html'%} {%block title%}Register{%endblock%}
-
+{%block navbar_fullsearch%}{%endblock%}
+{%block navbar_register%}{%endblock%}
 {%block content%}
+<style>
+    .form-group{
+        margin: 0 auto;
+        width: 100%;
+        max-width: 25rem;
+    }
+    .btn-primary{
+        margin-top: 1rem;
+        width: 100%;
+    }
 
-<h1>Cadastro</h1>
+    .btn-secondary{
+        margin-top: 1rem;
+        width: 100%;
+    }
+</style>
+<form method="POST" class="form-group">
+    <h3 align="center">Cadastro</h3>
+    <div >
+        <label for="firstName">Primeiro nome</label>
+        <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Informe seu primeiro nome"/>
+    </div>
+
+    <div >
+        <label for="lastName">Último nome</label>
+        <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Informe seu útimo nome"/>
+    </div>
+
+    <div >
+        <label for="userName">Nome de Usuário</label>
+        <input type="text" class="form-control" id="userName" name="userName" placeholder="Informe o nome de usuário desejado"/>
+    </div>
+
+    <div >
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Informe seu email email"/>
+    </div>
+
+    <div >
+        <label for="passWord">Senha</label>
+        <input type="password" class="form-control" id="passWord" name="passWord" placeholder="Informe uma senha"/>
+    </div>
+
+    <div >
+        <label for="passWord_confirm">Senha (Confirmação)</label>
+        <input type="password" class="form-control" id="passWord_confirm" name="passWord_confirm" placeholder="Confirme a senha"/>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <a class="btn btn-secondary" href="/home" role="button">Cancelar</a>
+
+</form>
+
 
 {%endblock%}
