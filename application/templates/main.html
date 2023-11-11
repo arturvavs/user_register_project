@@ -21,7 +21,7 @@
             {%block navbar_collapse%}
           <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
             {%block navbar_hidden_brand%}
-            <img src="A.jpg">
+            
             {%endblock%}
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {%block navbar_home%}
@@ -41,6 +41,11 @@
                 <a class="nav-link active" aria-current="page" href="/register">Cadastre-se</a>
               </li>
                 {%endblock%}
+                {%block navbar_management%}
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/user_management">Gestão de Usuários</a>
+              </li>
+                {%endblock%}       
             </ul>
             {%block navbar_fullsearch%}
             <form class="d-flex" role="search">
