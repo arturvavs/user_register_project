@@ -60,6 +60,7 @@ def user_management():
 @auth.route('/user/<int:id>', methods=['DELETE'])
 def delete_user(id):
     if request.method == 'DELETE':
+        connection.delete_users(id)
         print('entrou no delete:',id)
     return render_template("user_management.html")
             

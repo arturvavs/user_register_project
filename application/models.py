@@ -62,32 +62,24 @@ class Conexao():
                 connection.close()
         return decoded_result
 
-    def list_user_name(self,sql):
+    def delete_users(self,userId):
         connection = cx_Oracle.connect(user=self.un, password=self.pw, dsn=self.cs)
-        if connection:
-            try:
-                with connection.cursor() as cursor:
-                    cursor.execute(sql)
-                    rows = cursor.fetchone() 
-                    users = [] 
-                    for row in rows:
-                        users.append({
-                            'nm_usuario': row[0],
-                        })
-                    json_result = json.dumps(users)
-                    decoded_result = json.loads(json_result)
-            except cx_Oracle.DatabaseError as e:
-                flash('Erro ao fazer login: ' + str(e), category='error')
-            finally:
-                connection.close()
-        return decoded_result
+        sql = f"DELETE FROM USERS WHERE NR_SEQUENCIA = {userId}"
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute(sql)
+                connection.commit()
+                flash('User deleted!', category='success')
+        except cx_Oracle.DatabaseError as error:
+            flash('Erro ao fazer login: ' + str(error), category='error')
+        return None
 
-userName = 'admin2'
+#userName = 'admin2'
 connection = Conexao()
 #connection = cx_Oracle.connect(user=conexao.un, password=conexao.pw, dsn=conexao.cs)
-sql = (f"SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC")
-result = connection.list_users(sql)
-print(result)
+#sql = (f"SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC")
+#result = connection.list_users(sql)
+#print(result)
 #with connection.cursor() as cursor:
 #    cursor.execute(sql)
 #    rows = cursor.fetchall() 
