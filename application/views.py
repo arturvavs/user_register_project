@@ -14,3 +14,7 @@ def user_register():
 @views.route('/login')
 def user_login():
     return render_template("login.html")
+
+@views.route('/user_managemant')
+def user_managemant():
+    return render_template("user_management.html")

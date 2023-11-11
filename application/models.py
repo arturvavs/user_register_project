@@ -1,11 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 import cx_Oracle
-
-#with oracledb.connect(user=un, password=pw, dsn=cs) as connection:
-#    with connection.cursor() as cursor:
-#        sql = """select sysdate from dual"""
-#        for r in cursor.execute(sql):
-#           print(r)
+import json
 
 class Conexao():
     def __init__(self):
@@ -28,6 +23,7 @@ class Conexao():
             except cx_Oracle.Error as error:
                 print('Erro ao executar funcao:', error)
                 return None
+            
     def user_register(self,sql):
         connection = cx_Oracle.connect(user=self.un, password=self.pw, dsn=self.cs)
         if connection:
@@ -42,31 +38,67 @@ class Conexao():
                 flash('Error creating account: ' + str(error), category='error')
                 return None
             
+    def list_users(self,sql):
+        connection = cx_Oracle.connect(user=self.un, password=self.pw, dsn=self.cs)
+        if connection:
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql)
+                    rows = cursor.fetchall() 
+                    users = [] 
+                    for row in rows:
+                        users.append({
+                            'nr_sequencia': row[0],
+                            'nm_primeiro_nome': row[1], 
+                            'nm_ultimo_nome': row[2],
+                            'nm_usuario': row[3],
+                            'ds_email': row[4]
+                        })
+                    json_result = json.dumps(users)
+                    decoded_result = json.loads(json_result)
+            except cx_Oracle.DatabaseError as e:
+                flash('Erro ao fazer login: ' + str(e), category='error')
+            finally:
+                connection.close()
+        return decoded_result
+
+    def list_user_name(self,sql):
+        connection = cx_Oracle.connect(user=self.un, password=self.pw, dsn=self.cs)
+        if connection:
+            try:
+                with connection.cursor() as cursor:
+                    cursor.execute(sql)
+                    rows = cursor.fetchone() 
+                    users = [] 
+                    for row in rows:
+                        users.append({
+                            'nm_usuario': row[0],
+                        })
+                    json_result = json.dumps(users)
+                    decoded_result = json.loads(json_result)
+            except cx_Oracle.DatabaseError as e:
+                flash('Erro ao fazer login: ' + str(e), category='error')
+            finally:
+                connection.close()
+        return decoded_result
+
+userName = 'admin2'
 connection = Conexao()
-conexao = cx_Oracle.connect(user=connection.un, password=connection.pw, dsn=connection.cs)
+#connection = cx_Oracle.connect(user=conexao.un, password=conexao.pw, dsn=conexao.cs)
+sql = (f"SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC")
+result = connection.list_users(sql)
+print(result)
+#with connection.cursor() as cursor:
+#    cursor.execute(sql)
+#    rows = cursor.fetchall() 
+#    users = []
+#    for row in rows:
+#        users.append({
+#        'nr_sequencia': row[0],
+#        'nm_primeiro_nome': row[1], 
+#        'nm_ultimo_nome': row[2],
+#        'nm_usuario': row[3],
+#        'ds_email': row[4]
+#                        })
 
-
-
-
-sql = (f"select ds_senha from users where nm_usuario = 'admin'") 
-with conexao.cursor() as cursor:
-    cursor.execute(sql)
-    rows = cursor.fetchone()
-    for row in rows:
-        print(row)
-
-
-
-class User():
-    def __init__(self):
-        self.id
-        self.userName
-        self.password
-        self.firstName
-        self.lastName
-        self.email
-        self.permission
-
-
-
-
+#print(users)

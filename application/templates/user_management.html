@@ -1,0 +1,144 @@
+{% extends 'main.html' %} 
+{% block title %}Gestão Administrativa{% endblock %}
+{% block navbar_login %}{% endblock %}
+{% block navbar_register %}{% endblock %}
+{% block content %}
+<style>
+    button {
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #searchTerm, #searchBy, #btn-submit {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 3rem;
+        max-width: 10rem;
+        margin-bottom: 3rem;
+    }
+
+    .btn-warning, .btn-danger {
+        cursor: pointer;
+    }
+</style>
+
+<form id="form" action="/search" method="GET">
+    <label id="searchBy" for="searchBy">Search By:</label>
+    <select id="searchBy" name="searchBy">
+        <option value="name">Name</option>
+        <option value="username">Username</option>
+    </select>
+
+    <label id="searchTerm" for="searchTerm">Search Term:</label>
+    <input type="text" id="searchTerm" name="searchTerm" required>
+
+    <button id="btn-submit" type="submit">Search</button>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">P. Nome</th>
+                <th scope="col">U. Nome</th>
+                <th scope="col">Usuário</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for valor in json_list %}
+                <tr>
+                    <th scope="row">{{ valor.nr_sequencia }}</th>
+                    <td>{{ valor.nm_primeiro_nome }}</td>
+                    <td>{{ valor.nm_ultimo_nome }}</td>
+                    <td>{{ valor.nm_usuario }}</td>
+                    <td>{{ valor.ds_email }}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#confirmModal" data-user-id="{{ valor.nr_sequencia }}">Editar</button>
+                        <button type="button" class="btn btn-danger delete-btn" data-bs-toggle="modal" data-bs-target="#confirmModal" data-user-id="{{ valor.nr_sequencia }}">Excluir</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirmModalLabel">Confirmação</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Você tem certeza que deseja realizar esta ação?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="confirmActionBtn">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var userId; // Variável para armazenar o ID do usuário a ser editado ou excluído
+
+        $('.edit-btn, .delete-btn').click(function () {
+            userId = $(this).data('user-id');
+        });
+
+        $('#confirmModal').on('show.bs.modal', function (e) {
+            // Configurar a ação apropriada (editar ou excluir) com base no botão clicado
+            if ($('.edit-btn:focus').length > 0) {
+                // Ação de editar
+                $('#confirmActionBtn').data('action', 'edit');
+            } else if ($('.delete-btn:focus').length > 0) {
+                // Ação de excluir
+                $('#confirmActionBtn').data('action', 'delete');
+            }
+        });
+
+        $('#confirmActionBtn').click(function () {
+            var action = $(this).data('action');
+
+            // Verificar a ação a ser executada
+            if (action === 'edit') {
+                // Ação de editar
+                // Enviar requisição PUT
+                $.ajax({
+                    url: '/user/' + userId,
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    success: function (result) {
+                        console.log(result);
+                        // Atualizar a tabela ou fazer outras ações necessárias
+                    }
+                });
+            } else if (action === 'delete') {
+                // Ação de excluir
+                // Enviar requisição DELETE
+                $.ajax({
+                    url: '/user/' + userId,
+                    type: 'DELETE',
+                    success: function (result) {
+                        console.log(result);
+                        // Atualizar a tabela ou fazer outras ações necessárias
+                    }
+                });
+            }
+
+            // Fechar o modal após o processamento
+            $('#confirmModal').modal('hide');
+        });
+    });
+</script>
+{% endblock %}
