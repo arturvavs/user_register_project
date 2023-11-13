@@ -40,7 +40,7 @@ def register():
         passWord = request.form.get('passWord')
         passWord_confirm = request.form.get('passWord_confirm')
         print(firstName,lastName,userName,userEmail,passWord,passWord_confirm)
-        sql = (f"insert into users(nr_sequencia,nm_usuario,nm_primeiro_nome,nm_ultimo_nome,ds_email,dt_usuario_rec,ds_senha) values (users_seq.nextval,'{firstName}','{lastName}','{userName}','{userEmail}`',sysdate,'{passWord}')")
+        sql = (f"insert into users(nr_sequencia,nm_usuario,nm_primeiro_nome,nm_ultimo_nome,ds_email,dt_usuario_rec,ds_senha) values (users_seq.nextval,'{userName}','{firstName}','{lastName}','{userEmail}',sysdate,'{passWord}')")
         if passWord == passWord_confirm:
             connection.user_register(sql)
             print('user cadastrado')
@@ -51,7 +51,7 @@ def register():
 def user_management():
     if request.method == 'GET':
         print('entrou no post user_management')
-        sql = "SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS  ORDER BY 1 ASC"
+        sql = "SELECT NR_SEQUENCIA,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,NM_USUARIO,DS_EMAIL FROM USERS  ORDER BY 1 ASC"
         json_list = connection.list_users(sql)
         #return json_list
         #print(json_list)
@@ -79,7 +79,7 @@ def search_user():
         if (search_by == 'username'):
             userName = search_term
             print('Entrou no if do search term', userName)
-            sql = f"SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC"
+            sql = f"SELECT NR_SEQUENCIA,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,NM_USUARIO,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC"
             json_list = connection.list_users(sql)
             print(json_list)
         print('entrou no get search')
