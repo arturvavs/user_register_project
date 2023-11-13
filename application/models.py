@@ -4,9 +4,9 @@ import json
 
 class Conexao():
     def __init__(self):
-        self.un = 'SYSTEM'
-        self.cs = '127.0.0.1:1521/XE'
-        self.pw = 'root'
+        self.un = 'tasy'
+        self.cs = '172.27.27.6:1521/tasyfh.saocamilo.corp'
+        self.pw = 'aloisk'
         self.connection = None
         self.sql = None
          
