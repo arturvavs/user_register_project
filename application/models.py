@@ -74,8 +74,9 @@ class Conexao():
             flash('Erro ao fazer login: ' + str(error), category='error')
         return None
 
+
 #userName = 'admin2'
-connection = Conexao()
+
 #connection = cx_Oracle.connect(user=conexao.un, password=conexao.pw, dsn=conexao.cs)
 #sql = (f"SELECT NR_SEQUENCIA,NM_USUARIO,NM_PRIMEIRO_NOME,NM_ULTIMO_NOME,DS_EMAIL FROM USERS WHERE NM_USUARIO = '{userName}'  ORDER BY 1 ASC")
 #result = connection.list_users(sql)
